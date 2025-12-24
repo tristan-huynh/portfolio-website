@@ -1,22 +1,108 @@
-name: Rust
+name: Build and Deploy Documentation
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ "main" ]
-
-env:
-  CARGO_TERM_COLOR: always
+    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
+  build-and-deploy:
+    runs-on: self-hosted
+    
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust 
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
+
+      - name: Cache cargo index
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-git-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-git-
+
+      - name: Cache target directory
+        uses: actions/cache@v3
+        with:
+          path: target
+          key: ${{ runner.os }}-target-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-target-
+
+      - name: Check formatting
+        run: cargo fmt -- --check
+
+      - name: Run clippy
+        run: cargo clippy -- -D warnings
+
+      - name: Build application
+        run: cargo build --release
+
+      - name: Run tests
+        run: cargo test --release
+
+      - name: Stop existing service (if running)
+        continue-on-error: true
+        run: |
+          if pgrep -f "mjboss-documentation" > /dev/null; then
+            sudo pkill -f "mjboss-documentation"
+            sleep 2
+          fi
+
+      - name: Deploy application
+        run: |
+          # Create deployment directory if it doesn't exist
+          sudo mkdir -p /opt/mjboss-documentation
+          
+          # Copy binary
+          sudo cp target/release/mjboss-documentation /opt/mjboss-documentation/
+          
+          # Copy documentation files maintaining structure
+          sudo mkdir -p /opt/mjboss-documentation/src
+          sudo cp -r src/docs /opt/mjboss-documentation/src/
+          
+          # Set permissions
+          sudo chmod +x /opt/mjboss-documentation/mjboss-documentation
+          sudo chown -R $USER:$USER /opt/mjboss-documentation
+
+      - name: Start application
+        run: |
+          cd /opt/mjboss-documentation
+          nohup ./mjboss-documentation > app.log 2>&1 &
+          sleep 3
+          
+          # Check if application started successfully
+          if pgrep -f "mjboss-documentation" > /dev/null; then
+            echo "Application started successfully"
+          else
+            echo "Failed to start application"
+            cat app.log
+            exit 1
+          fi
+
+      - name: Health check
+        run: |
+          sleep 5
+          curl -f http://localhost:3000 || exit 1
+
+      - name: Notify deployment
+        if: success()
+        run: echo "Deployment completed successfully at $(date)"
