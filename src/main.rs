@@ -13,5 +13,5 @@ async fn main() {
 }
 
 async fn home() -> Html<&'static str> {
-    Html("<h1>Hello world</h1>")
+    Html("")
 }
