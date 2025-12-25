@@ -27,12 +27,12 @@
     
 </head>
 <body class="bg-zinc-300 text-gray-300 p-0 m-0 min-h-screen flex flex-1 flex-col">
-    <!-- Header -->
+
     <div class="bg-blue-800 text-white px-4 py-1 text-center border-b-2 border-zinc-300">
         Portfolio Setup Utility
     </div>
     
-    <!-- Navigation Menu -->
+
     <div class="bg-blue-800 text-white px-4 py-1 flex gap-6">
         <span class="hover:bg-blue-600 px-2 cursor-pointer">Main</span>
         <span class="hover:bg-blue-600 px-2 cursor-pointer">Projects</span>
@@ -40,10 +40,28 @@
         <span class="hover:bg-blue-600 px-2 cursor-pointer">Save & Exit</span>
     </div>
 
-    <!-- Main Content Area -->
+    <div class="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-zinc-300 border-zinc-300 w-96" style="filter: drop-shadow(12px 12px 0px black);">
+            <div class="bg-blue-800 text-white px-4 py-2 font-bold">
+                Load Optimized Defaults
+            </div>
+            <div class="p-6 text-center text-blue-700 font-bold">
+                <p>Load Optimized Defaults?</p>
+            </div>
+            <div class="bg-blue-800 flex">
+                <button class="flex-1 text-white font-bold py-2 border-r-2 border-zinc-300 hover:bg-blue-700">
+                    Yes
+                </button>
+                <button class="flex-1 text-white font-bold py-2 hover:bg-blue-700">
+                    No
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="flex flex-1">
         <!-- Left Content Area -->
-        <div class="flex-1 bg-zinc-300 border-4 border-blue-600 m-2 mr-0 p-4 overflow-y-auto text-blue-700">
+        <div class="flex-1 bg-zinc-300 border-4 border-blue-800 m-2 mr-0 p-4 overflow-y-auto text-blue-700">
             <!-- Content will go here -->
             <div class="text-lg font-bold ml-1">
                 <div class="flex text-blue-700 ">
@@ -68,15 +86,13 @@
         </div>
 
         <!-- Right Help Panel -->
-        <div class="w-lg bg-zinc-300 border-4 border-l-0 border-blue-600 m-2 ml-0 p-4 text-blue-700 flex flex-col">
-            <!-- Info Panel (Top Half) -->
-            <div class="flex-1 mb-4 pb-4 border-b-4 border-blue-600 -mx-4">
+        <div class="w-lg bg-zinc-300 border-4 border-l-0 border-blue-800 m-2 ml-0 p-4 text-blue-700 flex flex-col">
+            <div class="flex-1 mb-4 pb-4 border-b-4 border-blue-800 -mx-4">
                 <div class="text-blue-700 px-4 font-bold">
                     Example text
                 </div>
             </div>
             
-            <!-- Navigation Help (Bottom Half) -->
             <div class="flex-1">
                 <div class="text-lg font-bold space-y-1">
                     <div>⇄: Select Screen</div>
@@ -91,7 +107,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-blue-800 text-white px-4 py-1 text-center flex justify-between">
         <span>Copyright &COPY; 2025 Tristan Huynh.</span>
         <span>Version 1.0.0</span>
