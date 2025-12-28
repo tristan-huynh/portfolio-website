@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} - Tristan Huynh's Portfolio</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href=" https://cdn.jsdelivr.net/npm/roboto-font@0.1.0/css/fonts.min.css " rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="thuynh - {}">
+    <meta name="description" content="{}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thuynh.work/">
+    <meta property="og:title" content="thuynh - {{ page_title }}">
+    <meta property="og:description" content="{{ page_description }}">
+    <meta property="og:image" content="https://mjboss.s7technologies.com/static/logo.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://thuynh.work/">
+    <meta name="twitter:title" content="thuynh - {{ page_title }}">
+    <meta name="twitter:description" content="{{ page_description }}">
+    <meta name="twitter:image" content="https://mjboss.s7technologies.com/static/logo.png">
+    
+</head>
+<body class="bg-zinc-300 text-gray-300 p-0 m-0 min-h-screen flex flex-1 flex-col">
+
+    <div class="bg-emerald-700 text-white px-4 py-1 border-b-2 border-zinc-300">
+        Interactive Portfolio Viewer
+    </div>
+    
+    <nav class="bg-blue-800 text-white px-4 py-1 flex gap-6">
+        <a href="/" class="{% if current_page == "main" %}bg-zinc-300 text-blue-800{% else %}hover:bg-blue-600{% endif %} px-2 cursor-pointer">Overview</a>
+        <a href="/projects" class="{% if current_page == "projects" %}bg-zinc-300 text-blue-800{% else %}hover:bg-blue-600{% endif %} px-2 cursor-pointer">Projects</a>
+        <a href="/contact" class="{% if current_page == "contact" %}bg-zinc-300 text-blue-800{% else %}hover:bg-blue-600{% endif %} px-2 cursor-pointer">Contact</a>
+    </nav>
+
+    <div class="flex flex-1">
+        <!-- Left Content Area -->
+        <div class="flex-1 bg-zinc-300 border-4 border-blue-800 m-2 mr-0 p-4 overflow-y-auto text-blue-700">
+            <!-- Content will go here -->
+            {% block content %}{% endblock %}
+        </div>
+
+        <!-- Right Help Panel -->
+        <div class="w-1/2 bg-zinc-300 border-4 border-l-0 border-blue-800 m-2 ml-0 p-4 text-zinc-500 flex flex-col">
+            <div class="flex-1 mb-4 pb-4 border-b-4 border-blue-800 -mx-4">
+                <div class="px-4 text-lg font-bold">
+                    {% block detailed %}{% endblock %}
+                </div>
+            </div>
+            
+            <div class="flex-1">
+                <div class="text-lg font-bold space-y-1">
+                    {% block detailed_2 %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-blue-800 text-white px-4 py-1 text-center flex justify-between">
+        <span>Copyright &COPY; 2025 Tristan Huynh</span>
+        <span>Version 1.0.0</span>
+    </footer>
+</body>
+</html>
