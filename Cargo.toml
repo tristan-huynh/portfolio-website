@@ -8,3 +8,4 @@ axum = "0.8.8"
 tokio = { version = "1.0", features = ["full"] }
 serde = "1.0.228"
 tera = "1.20.1"
+tower-http = "0.6.8"

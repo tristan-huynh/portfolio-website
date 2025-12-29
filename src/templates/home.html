@@ -1,31 +1,197 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="text-lg font-bold ml-1">
-    <div class="flex text-blue-700 ">
-        <span class="w-lg">Loreum Ipsum</span>
-        <span>[example value]</span>
+<div class="text-lg font-bold ml-1 mx-2 px-4">
+    
+    <div class="flex text-zinc-500">
+        <span class="w-lg">Device Name</span>
+        <span>Tristan Huynh</span>
     </div>
-    <div class="flex text-zinc-500 ">
-        <span class="w-lg">My</span>
-        <span>example value</span>
+    <div class="flex text-zinc-500">
+        <span class="w-lg">Status</span>
+        <span>Computer Engineering @ Michigan Technological University</span>
     </div>
-    <div class="flex text-blue-700">
+    <div class="flex text-zinc-500">
+        <span class="w-lg">Location</span>
+        <span>Grand Rapids, MI</span>
+    </div>
+
+    <div class="h-4"></div>
+
+    <div class="flex text-zinc-500">
+        <span class="w-lg">Skills</span>
+    </div>
+    <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
+        onmouseenter="updateContent('Low-level programming for microcontrollers and embedded systems. Experience with STM32 development boards and firmware programming.')"
+        onmouseleave="clearContent()">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>
-        <span class="w-lg">My Long Name For Text</span>
+        <span class="w-lg">Embedded Systems (C, STM32)</span>
     </div>
-    <div class="flex text-zinc-500 ">
-        <span class="w-lg">Label</span>
+    <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
+        onmouseenter="updateContent('Building robust backend systems with Rust and Python. Focused on performance, safety, and scalability.')"
+        onmouseleave="clearContent()">
+        <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 2l8 6-8 6V2z"/>
+        </svg>
+        <span class="w-lg">Backend Development (Rust, Python)</span>
+    </div>
+    <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
+        onmouseenter="updateContent('Creating responsive and interactive user interfaces using HTML, TailwindCSS, and JavaScript.')"
+        onmouseleave="clearContent()">
+        <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 2l8 6-8 6V2z"/>
+        </svg>
+        <span class="w-lg">Frontend Development (HTML, TailwindCSS, JS)</span>
+    </div>
+    <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
+        onmouseenter="updateContent('Designing and building PCBs, integrating hardware components with software solutions.')"
+        onmouseleave="clearContent()">
+        <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 2l8 6-8 6V2z"/>
+        </svg>
+        <span class="w-lg">Hardware Design & PCB Layout</span>
+    </div>
+    <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
+        onmouseenter="updateContent('Proficient in I2C, SPI, UART communication protocols for embedded systems integration.')"
+        onmouseleave="clearContent()">
+        <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 2l8 6-8 6V2z"/>
+        </svg>
+        <span class="w-lg">Communication Protocols (I2C, SPI, UART)</span>
+    </div>
+
+    <div class="h-4"></div>
+
+    <div class="flex text-zinc-500">
+        <span class="w-lg">Education</span>
+    </div>
+    <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
+        onmouseenter="updateContent('Bachelor of Science in Computer Engineering, Expected Graduation: 2027.<br><br> Relevant Coursework: Microcontrollers, Signals & Systems, Electronics, Digital Logic.\n\n')"
+        onmouseleave="clearContent()">
+        <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 2l8 6-8 6V2z"/>
+        </svg>
+        <span>B.S. Computer Engineering - Michigan Technological University</span>
+    </div>
+
+    <div class="h-4"></div>
+
+    <div class="flex text-zinc-500">
+        <span class="w-lg">Experience</span>
+    </div>
+    <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
+        onmouseenter="updateContent('Description of your internship, co-op, or relevant work experience including technologies used and contributions made.')"
+        onmouseleave="clearContent()">
+        <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 2l8 6-8 6V2z"/>
+        </svg>
+        <span class="w-lg">IT Infrastructure Support Intern - Service Express</span>
+    </div>
+
+    <div class="h-4"></div>
+    <div class="flex text-zinc-500">
+        <span class="w-lg">Projects</span>
+    </div>
+    <div class="flex text-blue-700 hover:bg-zinc-200 cursor-pointer"
+        onmouseenter="updateContentImg('../static/img/img0.jpg', 'Test' )"
+        onmouseleave="clearContent()">
+        <span class="w-lg">STM32 Digital Storage Oscilliscope</span>
+        <span class="text-zinc-500">C, STM32, Hardware Design</span>
+    </div>
+    <div class="flex text-blue-700 hover:bg-zinc-200 cursor-pointer"
+        onmouseenter="updateContentImg('../static/img/img0.jpg', 'Test')""
+        onmouseleave="clearContent()">
+        <span class="w-lg">Blue Marble Security Website</span>
+        <span class="text-zinc-500">HTML, TailwindCSS, JS, Astro</span>
+    </div>
+    <div class="flex text-blue-700 hover:bg-zinc-200 cursor-pointer"
+        onmouseenter="updateContentImg('../static/img/img0.jpg', 'Test')""
+        onmouseleave="clearContent()">
+        <span class="w-lg">STM32 Environmental Monitor</span>
+        <span class="text-zinc-500">C, STM32, I2C, SPI, SQLite</span>
+    </div>
+    <div class="flex text-blue-700 hover:bg-zinc-200 cursor-pointer"
+        onmouseenter="updateContentImg('../static/img/img0.jpg', 'Test')""
+        onmouseleave="clearContent()">
+        <span class="w-lg">What's To Eat Discord Bot</span>
+        <span class="text-zinc-500">Python, Docker</span>
+    </div>
+    <div class="flex text-blue-700 hover:bg-zinc-200 cursor-pointer"
+        onmouseenter="updateContentImg('../static/img/img0.jpg', 'Test')""
+        onmouseleave="clearContent()">
+        <span class="w-lg">Portfolio Website</span>
+        <span class="text-zinc-500">Rust, HTML, TailwindCSS, Jinja2</span>
     </div>
 </div>
 
 {% endblock %}
 
 {% block detailed %}
-Placeholder for image on hover
+<div class="px-4 text-zinc-500 transition-opacity duration-300 ease-in-out" id="detailed-content">Hover over highlighted items to see more details here.</div>
 {% endblock %}
 {% block detailed_2 %}
-Hover over the items on the left to see more details here.
+<div class="text-lg font-bold ml-1"></div>
+    <div class="flex text-zinc-500 px-4">
+        <span class="w-lg">Contacts</span>
+    </div>
+    <a class="flex text-blue-700 px-4 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6" href="https://www.linkedin.com/in/huynhtristan/" rel="noopener noreferrer" target="_blank"
+        onmouseenter="updateContent('My LinkedIn profile. This link opens in a new tab.')"
+        onmouseleave="clearContent()">
+        <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 2l8 6-8 6V2z"/>
+        </svg>
+        <span class="w-lg">LinkedIn</span>
+    </a>
+    <a class="flex text-blue-700 px-4 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6" href="https://github.com/tristan-huynh" rel="noopener noreferrer" target="_blank"
+        onmouseenter="updateContent('GitHub profile for more of my projects and code. This link opens in a new tab.')"
+        onmouseleave="clearContent()">
+        <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 2l8 6-8 6V2z"/>
+        </svg>
+        <span class="w-lg">GitHub</span>
+    </a>
+    <div class="flex text-blue-700 px-4 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
+        onmouseenter="updateContent('A contact form to send a message directly to me via email.')"
+        onmouseleave="clearContent()">
+        <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 2l8 6-8 6V2z"/>
+        </svg>
+        <span class="w-lg">Contact Me Directly</span>
+    </div>
+</div>
+
+<script>
+    function updateContent(detailed) {
+        const detailedBlock = document.getElementById("detailed-content");
+        if (detailedBlock) {
+            detailedBlock.style.opacity = '0';
+            setTimeout(() => {
+                detailedBlock.innerHTML = detailed;
+                detailedBlock.style.opacity = '1';
+            }, 150);
+        }
+    }
+    function updateContentImg(img, detailed) {
+        const detailedBlock = document.getElementById("detailed-content");
+        if (detailedBlock) {
+            detailedBlock.style.opacity = '0';
+            setTimeout(() => {
+                detailedBlock.innerHTML = detailed + '<br><img id="img-content" src="' + img + '" alt="Image" class="mt-2 w-full h-auto border-2 border-blue-800"/>';
+                detailedBlock.style.opacity = '1';
+            }, 150);
+        }
+    }
+    function clearContent() {
+        const detailedBlock = document.getElementById("detailed-content");
+        if (detailedBlock) {
+            detailedBlock.style.opacity = '0';
+            setTimeout(() => {
+                detailedBlock.innerHTML = "Hover over highlighted items to see more details here.";
+                detailedBlock.style.opacity = '1';
+            }, 150);
+        }
+    }
+</script>
 {% endblock %}
