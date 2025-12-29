@@ -2,6 +2,7 @@ use axum::{Router, extract::State, response::Html, routing::get};
 // use std::fs;
 use std::sync::Arc;
 use tera::{Context, Tera};
+use tower_http::services::ServeDir;
 
 #[tokio::main]
 async fn main() {
@@ -16,11 +17,10 @@ async fn main() {
         .route("/", get(home))
         .route("/projects", get(projects))
         .route("/contact", get(contact))
+        .nest_service("/static", ServeDir::new("src/static"))
         .with_state(Arc::new(tera));
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     println!("Listenting on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
 }

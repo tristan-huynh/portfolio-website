@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page_title }} - Tristan Huynh's Portfolio</title>
+    <title>Tristan Huynh - Portfolio</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href=" https://cdn.jsdelivr.net/npm/roboto-font@0.1.0/css/fonts.min.css " rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
     <!-- Primary Meta Tags -->
-    <meta name="title" content="thuynh - {}">
-    <meta name="description" content="{}">
+    <meta name="title" content="Tristan Huynh's Portfolio">
+    <meta name="description" content="Tristan Huynh - Computer Engineer @ Michigan Technological University. Explore my experience, skills, and projects.">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://thuynh.work/">
-    <meta property="og:title" content="thuynh - {{ page_title }}">
-    <meta property="og:description" content="{{ page_description }}">
-    <meta property="og:image" content="https://mjboss.s7technologies.com/static/logo.png">
+    <meta property="og:title" content="Tristan Huynh - Portfolio">
+    <meta property="og:description" content="Tristan Huynh's Portfolio">
+    <meta property="og:image" content="../static/img/">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://thuynh.work/">
-    <meta name="twitter:title" content="thuynh - {{ page_title }}">
-    <meta name="twitter:description" content="{{ page_description }}">
-    <meta name="twitter:image" content="https://mjboss.s7technologies.com/static/logo.png">
+    <meta name="twitter:title" content="Tristan Huynh - Portfolio">
+    <meta name="twitter:description" content="Tristan Huynh's Portfolio">
+    <meta name="twitter:image" content="../static/img/">
     
 </head>
 <body class="bg-zinc-100 text-gray-300 p-0 m-0 min-h-screen flex flex-1 flex-col">
@@ -32,21 +32,16 @@
         Interactive Portfolio Viewer
     </div>
     
-    <nav class="bg-blue-800 text-white px-4 py-1 flex gap-6">
-        <a href="/" class="{% if current_page == "main" %}bg-zinc-100 text-blue-800{% else %}hover:bg-blue-600{% endif %} px-2 cursor-pointer transition-all duration-200 ease-in-out">Overview</a>
-        <a href="/projects" class="{% if current_page == "projects" %}bg-zinc-100 text-blue-800{% else %}hover:bg-blue-600{% endif %} px-2 cursor-pointer transition-all duration-200 ease-in-out">Projects</a>
-        <a href="/contact" class="{% if current_page == "contact" %}bg-zinc-100 text-blue-800{% else %}hover:bg-blue-600{% endif %} px-2 cursor-pointer transition-all duration-200 ease-in-out">Contact</a>
-    </nav>
+    <div class="bg-blue-800 text-white px-4 py-1 flex gap-6">
+        <div>Active View: Overview</div>
+    </div>
 
-    <div class="flex flex-1">
-        <!-- Left Content Area -->
-        <div class="flex-1 bg-zinc-100 border-4 border-blue-800 m-2 mr-0 p-4 overflow-y-auto text-blue-700">
-            <!-- Content will go here -->
+    <div class="flex flex-col md:flex-row flex-1">
+        <div class="flex-1 bg-zinc-100 border-4 border-blue-800 m-2 md:mr-0 p-4 overflow-y-auto text-blue-700">
             {% block content %}{% endblock %}
         </div>
 
-        <!-- Right Help Panel -->
-        <div class="w-1/4 bg-zinc-100 border-4 border-l-0 border-blue-800 m-2 ml-0 p-4 text-zinc-500 flex flex-col">
+        <div class="w-1/4 bg-zinc-100 border-4 border-l-0 border-blue-800 m-2 ml-0 p-4 text-zinc-500 flex flex-col hidden md:flex">
             <div class="flex-1 mb-4 pb-4 border-b-4 border-blue-800 -mx-4">
                 <div class="px-4 text-lg font-bold">
                     {% block detailed %}{% endblock %}
@@ -61,9 +56,22 @@
         </div>
     </div>
 
+    <div id="mobile-popup" class="hidden md:hidden fixed inset-0 items-center justify-center z-50">
+        <div class="bg-zinc-100 border-4 border-blue-800 w-11/12 max-w-lg mx-4 max-h-[80vh] overflow-y-auto">
+            <div class="bg-blue-800 text-white px-4 py-2 font-bold flex justify-between items-center">
+                <span>Details</span>
+                <button onclick="event.stopPropagation(); closeMobilePopup();" class="text-2xl hover:text-zinc-300">&times;</button>
+            </div>
+            <div class="p-4 text-blue-700 font-bold">
+                <div id="mobile-detailed-content" class="text-zinc-500 mb-4"></div>
+            </div>
+        </div>
+    </div>
+
     <footer class="bg-blue-800 text-white px-4 py-1 text-center flex justify-between">
         <span>Copyright &COPY; 2025 Tristan Huynh</span>
         <span>Version 1.0.0</span>
     </footer>
+    <script src="../static/main.js"></script>
 </body>
 </html>
