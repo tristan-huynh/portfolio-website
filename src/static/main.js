@@ -64,10 +64,10 @@ function clearContent() {
 let isMobile = window.matchMedia("(max-width: 768px)").matches;
 let activeElement = null;
 if (isMobile) {
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const hoverElements = document.querySelectorAll('[onmouseenter]:not(a[href])');
         hoverElements.forEach(element => {
-            element.addEventListener('click', function(e) {
+            element.addEventListener('click', function (e) {
                 if (this !== activeElement) {
                     e.preventDefault();
                     const mouseenterAttr = this.getAttribute('onmouseenter');
@@ -77,4 +77,58 @@ if (isMobile) {
             });
         });
     });
+}
+
+function openContactModal() {
+    const modal = document.getElementById('contact-modal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeContactModal() {
+    const modal = document.getElementById('contact-modal');
+    const form = document.getElementById('contact-form');
+    if (form) {
+        form.reset();
+    }
+    if (!modal) return;
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+}
+
+async function submitContactForm() {
+    const form = document.getElementById("contact-form");
+
+    if (!form) {
+        console.error("Contact form not found");
+        return;
+    }
+
+    const buttons = form.querySelectorAll("button");
+    buttons.forEach(btn => btn.disabled = true);
+
+    const formData = new FormData(form);
+    const body = new URLSearchParams(formData);
+
+    try {
+        const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: body.toString(),
+        });
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        form.reset();
+        // do something on good lol 
+        closeContactModal();
+    } catch (err) {
+        console.error(err);
+        // do something on error
+    } finally {
+        buttons.forEach(btn => btn.disabled = false);
+    }
 }

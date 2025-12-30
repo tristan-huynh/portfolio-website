@@ -146,7 +146,7 @@
         onmouseenter="updateContentImg('../static/img/port.png', 'A personal portfolio website built with Rust and Tera templating engine, featuring a responsive design with TailwindCSS. Showcases projects, skills, and contact information with dynamic content rendering.')"
         onmouseleave="clearContent()">
         <span class="w-lg group-hover:pl-6 transition-all duration-200 ease-in-out">Portfolio Website</span>
-        <span class="text-zinc-500">HTML, TailwindCSS, Rust, Jinja2</span>
+        <span class="text-zinc-500">HTML, TailwindCSS, Javascript, Rust</span>
     </div>
     <a class="flex text-blue-700 px-4 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6 ml-6" 
         href="https://github.com/tristan-huynh/portfolio-website" 
@@ -183,7 +183,7 @@
         </svg>
         <span class="w-lg">GitHub</span>
     </a>
-    <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6">
+    <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6" onclick="openContactModal()">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>
@@ -218,12 +218,13 @@
         <span class="w-lg">GitHub</span>
     </a>
     <div class="flex text-blue-700 px-4 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
+        onclick="openContactModal()"
         onmouseenter="updateContent('A contact form to send a message directly to me via email.')"
         onmouseleave="clearContent()">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>
-        <span class="w-lg">Contact Me Directly</span>
+        <span class="w-lg">Contact Me</span>
     </div>
 </div>
 {% endblock %}

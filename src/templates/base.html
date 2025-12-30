@@ -16,14 +16,14 @@
     <meta property="og:url" content="https://thuynh.work/">
     <meta property="og:title" content="Tristan Huynh - Portfolio">
     <meta property="og:description" content="Tristan Huynh's Portfolio">
-    <meta property="og:image" content="../static/img/">
+    <meta property="og:image" content="/static/img/">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://thuynh.work/">
     <meta name="twitter:title" content="Tristan Huynh - Portfolio">
     <meta name="twitter:description" content="Tristan Huynh's Portfolio">
-    <meta name="twitter:image" content="../static/img/">
+    <meta name="twitter:image" content="/static/img/">
     
 </head>
 <body class="bg-zinc-100 text-gray-300 p-0 m-0 min-h-screen flex flex-1 flex-col">
@@ -67,11 +67,45 @@
             </div>
         </div>
     </div>
-
+    <div id="contact-modal" class="hidden fixed inset-0 flex items-center justify-center z-50">
+        <div class="bg-zinc-300 border-zinc-300 w-96 max-w-[90vw]" style="filter: drop-shadow(12px 12px 0px black);">
+            <div class="bg-blue-800 text-white px-4 py-2 font-bold flex justify-between items-center">
+                <span>Contact Me</span>
+                <button onclick="closeContactModal()" class="text-2xl hover:text-zinc-300">&times;</button>
+            </div>
+            <div class="p-6 text-blue-700 font-bold">
+                <form id="contact-form" class="space-y-4" method="POST" action="/contact">
+                    <div>
+                        <label for="name" class="block text-sm mb-1">Name</label>
+                        <input type="text" id="name" name="name" required
+                            class="w-full px-3 py-2 border-4 border-blue-800 bg-zinc-100 text-zinc-800 focus:outline-none focus:border-blue-600">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm mb-1">Email</label>
+                        <input type="email" id="email" name="email" required
+                            class="w-full px-3 py-2 border-4 border-blue-800 bg-zinc-100 text-zinc-800 focus:outline-none focus:border-blue-600">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm mb-1">Message</label>
+                        <textarea id="message" name="message" rows="4" required
+                            class="w-full px-3 py-2 border-4 border-blue-800 bg-zinc-100 text-zinc-800 focus:outline-none focus:border-blue-600 resize-none"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="bg-blue-800 flex">
+                <button onclick="submitContactForm()" class="flex-1 text-white font-bold py-2 border-r-2 border-zinc-300 hover:bg-blue-700">
+                    Send
+                </button>
+                <button onclick="closeContactModal()" class="flex-1 text-white font-bold py-2 hover:bg-blue-700">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
     <footer class="bg-blue-800 text-white px-4 py-1 text-center flex justify-between">
         <span>Copyright &COPY; 2025 Tristan Huynh</span>
         <span>Version 1.0.0</span>
     </footer>
-    <script src="../static/main.js"></script>
+    <script src="/static/main.js"></script>
 </body>
 </html>
