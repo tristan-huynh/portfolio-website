@@ -96,7 +96,12 @@ async fn send_email(name: &str, email: &str, message: &str) -> Result<(), String
 
     let message_email = Message::builder()
         .from(Mailbox::new(None, smtp_username.parse().unwrap()))
-        .reply_to(Mailbox::new(Some(name.to_string()), email.parse().map_err(|_| "Invalid email address".to_string())?))
+        .reply_to(Mailbox::new(
+            Some(name.to_string()),
+            email
+                .parse()
+                .map_err(|_| "Invalid email address".to_string())?,
+        ))
         .to(Mailbox::new(None, smtp_username.parse().unwrap()))
         .subject("New Contact Form Submission")
         .header(header::ContentType::TEXT_PLAIN)
