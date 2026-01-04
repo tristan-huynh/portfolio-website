@@ -87,48 +87,77 @@ function openContactModal() {
 }
 
 function closeContactModal() {
-    const modal = document.getElementById('contact-modal');
-    const form = document.getElementById('contact-form');
-    if (form) {
-        form.reset();
+    document.getElementById('contact-modal').classList.add('hidden');
+    document.getElementById('contact-form').reset();
+    clearFormErrors();
+    if (window.turnstile) {
+        turnstile.reset();
     }
-    if (!modal) return;
-    modal.classList.remove('flex');
-    modal.classList.add('hidden');
 }
 
-async function submitContactForm() {
-    const form = document.getElementById("contact-form");
-
-    if (!form) {
-        console.error("Contact form not found");
-        return;
+function closeSuccessModal() {
+    document.getElementById('success-modal').classList.add('hidden');
+    document.getElementById('contact-modal').classList.add('hidden');
+    document.getElementById('contact-form').reset();
+    if (window.turnstile) {
+        turnstile.reset();
     }
+}
 
-    const buttons = form.querySelectorAll("button");
-    buttons.forEach(btn => btn.disabled = true);
-
-    const formData = new FormData(form);
-    const body = new URLSearchParams(formData);
-
-    try {
-        const response = await fetch(form.action, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: body.toString(),
-        });
-        if (!response.ok) {
-            throw new Error(`Server error: ${response.status}`);
+function clearFormErrors() {
+    const errorElements = ['name-error', 'email-error', 'message-error', 'form-error'];
+    errorElements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = '';
+            element.classList.add('hidden');
         }
-        form.reset();
-        // do something on good lol 
-        closeContactModal();
-    } catch (err) {
-        console.error(err);
-        // do something on error
-    } finally {
-        buttons.forEach(btn => btn.disabled = false);
+    });
+}
+
+function showFieldError(fieldId, message) {
+    const errorElement = document.getElementById(`${fieldId}-error`);
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.remove('hidden');
+    }
+}
+
+function showFormError(message) {
+    const errorElement = document.getElementById('form-error');
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.remove('hidden');
+    }
+}
+
+
+async function submitContactForm() {
+    clearFormErrors();
+    
+    const form = document.getElementById('contact-form');
+    const formData = new FormData(form);
+    
+    try {
+        const response = await fetch('/contact', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            document.getElementById('success-modal').classList.remove('hidden');
+            document.getElementById('success-modal').classList.add('flex');
+        } else if (response.status === 400) {
+            const errors = await response.json();
+            showFormError(errors.message || 'Verification failed. Please try again.');
+        } else if (response.status === 500) {
+            const errors = await response.json();
+            showFormError(errors.message || 'Server error. Please try again later.');
+        } else {
+            showFormError('An error occurred. Please try again later.');
+        }
+    } catch (error) {
+        console.error('Form submission error:', error);
+        showFormError('Network error. Please check your connection.');
     }
 }

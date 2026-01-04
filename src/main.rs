@@ -1,8 +1,8 @@
-use axum::{Form, Router, extract::State, http::StatusCode, response::Html, routing::get};
+use axum::{Form, Router, extract::State, http::StatusCode, response::Html, routing::get, Json};
 use lettre::message::{Mailbox, Message, header};
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{SmtpTransport, Transport};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::env;
 use std::sync::Arc;
 use tera::{Context, Tera};
@@ -71,14 +71,40 @@ struct ContactForm {
     name: String,
     email: String,
     message: String,
+    #[serde(rename = "cf-turnstile-response")]
+    turnstile_response: String,
 }
 
-async fn contact_post(State(_tera): State<Arc<Tera>>, Form(form): Form<ContactForm>) -> StatusCode {
-    match send_email(&form.name, &form.email, &form.message).await {
-        Ok(_) => StatusCode::OK,
+#[derive(Deserialize)]
+struct TurnstileResponse {
+    success: bool,
+    #[serde(rename = "error-codes")]
+    error_codes: Option<Vec<String>>,
+}
+
+#[derive(Serialize)]
+struct ErrorResponse {
+    message: String,
+}
+
+async fn contact_post(State(_tera): State<Arc<Tera>>, Form(form): Form<ContactForm>) -> Result<StatusCode, (StatusCode, Json<ErrorResponse>)> {
+    match verify_turnstile(&form.turnstile_response).await {
+        Ok(_) => {
+            match send_email(&form.name, &form.email, &form.message).await {
+                Ok(_) => Ok(StatusCode::OK),
+                Err(e) => {
+                    eprintln!("Email send failed: {}", e);
+                    Err((StatusCode::INTERNAL_SERVER_ERROR, Json(ErrorResponse {
+                        message: "Failed to send email".to_string()
+                    })))
+                }
+            }
+        }
         Err(e) => {
-            eprintln!("Email send failed: {}", e);
-            StatusCode::INTERNAL_SERVER_ERROR
+            eprintln!("Turnstile verification failed: {}", e);
+            Err((StatusCode::BAD_REQUEST, Json(ErrorResponse {
+                message: "Verification failed. Please try again.".to_string()
+            })))
         }
     }
 }
@@ -121,4 +147,36 @@ async fn send_email(name: &str, email: &str, message: &str) -> Result<(), String
         .send(&message_email)
         .map_err(|e| format!("Failed to send email: {}", e))?;
     Ok(())
+}
+
+
+async fn verify_turnstile(token: &str) -> Result<bool, String> {
+    let secret = env::var("TURNSTILE_SECRET_KEY")
+        .map_err(|_| "TURNSTILE_SECRET_KEY not set".to_string())?;
+    
+    let params = serde_json::json!({
+        "secret": secret,
+        "response": token,
+    });
+    
+    let response = reqwest::Client::new()
+        .post("https://challenges.cloudflare.com/turnstile/v0/siteverify")
+        .json(&params)
+        .send()
+        .await
+        .map_err(|e| format!("Turnstile verification request failed: {}", e))?;
+    
+    let result: TurnstileResponse = response
+        .json()
+        .await
+        .map_err(|e| format!("Failed to parse Turnstile response: {}", e))?;
+    
+    if !result.success {
+        if let Some(codes) = result.error_codes {
+            return Err(format!("Turnstile verification failed: {:?}", codes));
+        }
+        return Err("Turnstile verification failed".to_string());
+    }
+    
+    Ok(true)
 }
