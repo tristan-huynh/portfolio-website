@@ -11,11 +11,11 @@ use tera::{Context, Tera};
 use tower_http::services::ServeDir;
 use tower_http::set_header::SetResponseHeaderLayer;
 
+use axum::extract::ConnectInfo;
 use std::collections::HashMap;
+use std::net::SocketAddr;
 use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
-use axum::extract::ConnectInfo;
-use std::net::SocketAddr;
 
 struct RateLimiter {
     requests: Mutex<HashMap<String, Vec<u64>>>,
@@ -33,17 +33,17 @@ impl RateLimiter {
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_secs();
-        
+
         let mut requests = self.requests.lock().unwrap();
         let ip_requests = requests.entry(ip.to_string()).or_insert_with(Vec::new);
-        
+
         // Remove old requests outside window
         ip_requests.retain(|&timestamp| now - timestamp < window_secs);
-        
+
         if ip_requests.len() >= max_requests {
             return false;
         }
-        
+
         ip_requests.push(now);
         true
     }
@@ -79,10 +79,10 @@ async fn main() {
             std::process::exit(1);
         }
     };
-let app_state = Arc::new(AppState {
-    tera: Arc::new(tera),
-    rate_limiter: Arc::new(RateLimiter::new()),
-});
+    let app_state = Arc::new(AppState {
+        tera: Arc::new(tera),
+        rate_limiter: Arc::new(RateLimiter::new()),
+    });
 
     let app = Router::new()
         .route("/", get(home))
@@ -125,7 +125,8 @@ async fn home(State(app_state): State<Arc<AppState>>) -> Html<String> {
     context.insert("current_page", "main");
     context.insert("page_title", "Main");
     context.insert("page_description", "Welcome to my portfolio website.");
-    let html = app_state.tera
+    let html = app_state
+        .tera
         .render("home.html", &context)
         .expect("Failed to render template");
     Html(html)
@@ -136,7 +137,8 @@ async fn projects(State(app_state): State<Arc<AppState>>) -> Html<String> {
     context.insert("current_page", "projects");
     context.insert("page_title", "Projects");
     context.insert("page_description", "A showcase of my projects.");
-    let html = app_state.tera
+    let html = app_state
+        .tera
         .render("projects.html", &context)
         .expect("Failed to render template");
     Html(html)
@@ -147,7 +149,8 @@ async fn contact(State(app_state): State<Arc<AppState>>) -> Html<String> {
     context.insert("current_page", "contact");
     context.insert("page_title", "Contact");
     context.insert("page_description", "Get in touch with me.");
-    let html = app_state.tera
+    let html = app_state
+        .tera
         .render("contact.html", &context)
         .expect("Failed to render template");
     Html(html)
@@ -190,7 +193,7 @@ async fn contact_post(
             }),
         ));
     }
-    
+
     if form.name.len() > 100 || form.email.len() > 100 || form.message.len() > 1000 {
         return Err((
             StatusCode::BAD_REQUEST,
