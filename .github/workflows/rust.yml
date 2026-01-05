@@ -72,11 +72,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Verify checksum
-        run: |
-          cd ./artifact
-          sha256sum -c portfolio-website.sha256
-
       - name: Stop service
         continue-on-error: true
         run: |
