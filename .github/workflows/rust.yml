@@ -88,15 +88,15 @@ jobs:
       - name: Generate checksum
         run: |
           cd target/release
-          sha256sum portfolio > portfolio.sha256
+          sha256sum portfolio-website > portfolio-website.sha256
           
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: portfolio-binary
           path: |
-            target/release/portfolio
-            target/release/portfolio.sha256
+            target/release/portfolio-website
+            target/release/portfolio-website.sha256
           retention-days: 30
           if-no-files-found: error
 
@@ -117,15 +117,15 @@ jobs:
       - name: Verify checksum
         run: |
           cd ./artifact
-          sha256sum -c portfolio.sha256
+          sha256sum -c portfolio-website.sha256
 
       - name: Create backup of current version
         continue-on-error: true
         run: |
-          if [ -f /opt/portfolio/portfolio ]; then
-            sudo cp /opt/portfolio/portfolio /opt/portfolio/portfolio.backup.$(date +%Y%m%d_%H%M%S)
+          if [ -f /opt/portfolio/portfolio-website ]; then
+            sudo cp /opt/portfolio/portfolio-website /opt/portfolio/portfolio-website.backup.$(date +%Y%m%d_%H%M%S)
             # Keep only last 5 backups
-            cd /opt/portfolio && sudo ls -t portfolio.backup.* 2>/dev/null | tail -n +6 | xargs -r sudo rm
+            cd /opt/portfolio && sudo ls -t portfolio-website.backup.* 2>/dev/null | tail -n +6 | xargs -r sudo rm
           fi
 
       - name: Stop service
@@ -141,13 +141,13 @@ jobs:
           sudo mkdir -p /opt/portfolio/logs
           
           # Copy binary
-          sudo cp ./artifact/portfolio /opt/portfolio/portfolio.new
+          sudo cp ./artifact/portfolio-website /opt/portfolio/portfolio-website.new
           
           # Set restrictive permissions (owner read/execute only)
-          sudo chmod 550 /opt/portfolio/portfolio.new
+          sudo chmod 550 /opt/portfolio/portfolio-website.new
           
           # Atomic rename
-          sudo mv /opt/portfolio/portfolio.new /opt/portfolio/portfolio
+          sudo mv /opt/portfolio/portfolio-website.new /opt/portfolio/portfolio-website
           
           # Create dedicated service user if doesn't exist
           id -u portfolio &>/dev/null || sudo useradd -r -s /bin/false -d /opt/portfolio portfolio
@@ -167,7 +167,7 @@ jobs:
           User=portfolio
           Group=portfolio
           WorkingDirectory=/opt/portfolio
-          ExecStart=/opt/portfolio/portfolio
+          ExecStart=/opt/portfolio/portfolio-website
           Restart=on-failure
           RestartSec=5
           StandardOutput=journal
@@ -230,9 +230,9 @@ jobs:
           sudo systemctl stop portfolio
           
           # Restore from backup
-          BACKUP=$(sudo ls -t /opt/portfolio/portfolio.backup.* 2>/dev/null | head -n1)
+          BACKUP=$(sudo ls -t /opt/portfolio/portfolio-website.backup.* 2>/dev/null | head -n1)
           if [ -n "$BACKUP" ]; then
-            sudo cp "$BACKUP" /opt/portfolio/portfolio
+            sudo cp "$BACKUP" /opt/portfolio/portfolio-website
             sudo systemctl start portfolio
             echo "Rollback completed"
           else
