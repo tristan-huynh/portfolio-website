@@ -109,11 +109,11 @@ async fn main() {
             header::CONTENT_SECURITY_POLICY,
             HeaderValue::from_static(
                 "default-src 'self'; \
-                script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://challenges.cloudflare.com; \
+                script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://challenges.cloudflare.com https://static.cloudflareinsights.com; \
                 style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; \
                 img-src 'self' data:; \
                 font-src 'self' https://cdn.jsdelivr.net; \
-                connect-src 'self' https://challenges.cloudflare.com https://cdn.jsdelivr.net; \
+                connect-src 'self' https://challenges.cloudflare.com https://cdn.jsdelivr.net https://static.cloudflareinsights.com; \
                 frame-src https://challenges.cloudflare.com;"
             ),
         ))
