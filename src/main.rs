@@ -270,7 +270,7 @@ async fn send_email(name: &str, email: &str, message: &str) -> Result<(), String
 // cloudflare turnstile serversided work
 async fn verify_turnstile(token: &str) -> Result<bool, String> {
     let secret =
-        env::var("TURNSTILE_SECRET_KEY").map_err(|_| "TURNSTILE_SECRET_KEY not set".to_string())?;
+        env::var("TURNSTILE_SECRET_KEY").map_err(|_| "TURNSTILE_SECRET_KEY not set".to_string()).or_default();
 
     let params = serde_json::json!({
         "secret": secret,
