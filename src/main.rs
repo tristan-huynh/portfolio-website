@@ -18,6 +18,7 @@ use std::net::SocketAddr;
 use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use regex::Regex;
 // rate limiter implmentation
 struct RateLimiter {
     requests: Mutex<HashMap<String, Vec<u64>>>,
@@ -210,6 +211,24 @@ async fn contact_post(
             }),
         ));
     }
+    let email_regex = Regex::new(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").unwrap();
+    if !email_regex.is_match(&form.email) {
+        return Err((
+            StatusCode::BAD_REQUEST,
+            Json(ErrorResponse {
+                message: "Invalid email address".to_string(),
+            }),
+        ));
+    }
+    if form.name.contains('\0') || form.email.contains('\0') || form.message.contains('\0') {
+        return Err((
+            StatusCode::BAD_REQUEST,
+            Json(ErrorResponse {
+                message: "Invalid characters in input".to_string(),
+            }),
+        ));
+    }
+
     match verify_turnstile(&form.turnstile_response).await {
         Ok(_) => match send_email(&form.name, &form.email, &form.message).await {
             Ok(_) => Ok(StatusCode::OK),
@@ -236,6 +255,10 @@ async fn contact_post(
 }
 
 async fn send_email(name: &str, email: &str, message: &str) -> Result<(), String> {
+    let sanitized_name = name.replace(['\r', '\n', '\0'], "");
+    let sanitized_email = email.replace(['\r', '\n', '\0'], "");
+    let sanitized_message = message.replace('\0', "");
+
     let smtp_username =
         env::var("SMTP_USERNAME").map_err(|_| "SMTP_USERNAME not set".to_string())?;
     let smtp_password =
@@ -249,8 +272,8 @@ async fn send_email(name: &str, email: &str, message: &str) -> Result<(), String
     let message_email = Message::builder()
         .from(Mailbox::new(None, smtp_username.parse().unwrap()))
         .reply_to(Mailbox::new(
-            Some(name.to_string()),
-            email
+            Some(sanitized_name.to_string()),
+            sanitized_email
                 .parse()
                 .map_err(|_| "Invalid email address".to_string())?,
         ))
@@ -259,7 +282,7 @@ async fn send_email(name: &str, email: &str, message: &str) -> Result<(), String
         .header(lettre_header::ContentType::TEXT_PLAIN)
         .body(format!(
             "Name: {}\nEmail: {}\n\nMessage:\n{}",
-            name, email, message
+            sanitized_name, sanitized_email, sanitized_message
         ))
         .map_err(|e| format!("Failed to build email: {}", e))?;
 

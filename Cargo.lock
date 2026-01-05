@@ -1387,6 +1387,7 @@ dependencies = [
  "axum",
  "dotenvy",
  "lettre",
+ "regex",
  "reqwest",
  "serde",
  "serde_json",
