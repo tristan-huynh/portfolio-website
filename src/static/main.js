@@ -1,10 +1,13 @@
 let isClosing = false;
+let activeElement = null;
+
+const mobileQuery = window.matchMedia("(max-width: 768px)");
 
 function showMobilePopup(content) {
     if (isClosing) {
         return;
     }
-    const isMobile = navigator.userAgentData?.mobile || window.innerWidth < 768;
+    const isMobile = navigator.userAgentData?.mobile || mobileQuery.matches;
     const popup = document.getElementById('mobile-popup');
     if (popup.classList.contains('flex')) {
         return;
@@ -26,7 +29,13 @@ function closeMobilePopup() {
         isClosing = false;
     }, 300);
 }
-function updateContent(detailed, isLink = false) {
+
+function updateContent(detailed, isLink = false, isClick = false) {
+    // Skip hover events on mobile - only allow click interactions
+    if (mobileQuery.matches && !isLink && !isClick) {
+        return;
+    }
+    
     const detailedBlock = document.getElementById("detailed-content");
     if (detailedBlock) {
         detailedBlock.style.opacity = '0';
@@ -39,7 +48,12 @@ function updateContent(detailed, isLink = false) {
         showMobilePopup(detailed);
     }
 }
-function updateContentImg(img, detailed) {
+function updateContentImg(img, detailed, isClick = false) {
+    // disable hover on mobile
+    if (mobileQuery.matches && !isClick) {
+        return;
+    }
+    
     const detailedBlock = document.getElementById("detailed-content");
     if (detailedBlock) {
         detailedBlock.style.opacity = '0';
@@ -48,9 +62,15 @@ function updateContentImg(img, detailed) {
             detailedBlock.style.opacity = '1';
         }, 150);
     }
-    showMobilePopup(detailed + '<br><img id="img-content" src="' + img + '" alt="Image" class="mt-2 w-full h-auto border-4 border-blue-800 p-2"/>');
+    const imgContent = detailed + '<br><img id="img-content" src="' + img + '" alt="Image" class="mt-2 w-full h-auto border-4 border-blue-800 p-2"/>';
+    showMobilePopup(imgContent);
 }
 function clearContent() {
+    // disable hover on mobile
+    if (mobileQuery.matches) {
+        return;
+    }
+    
     const detailedBlock = document.getElementById("detailed-content");
     if (detailedBlock) {
         detailedBlock.style.opacity = '0';
@@ -61,22 +81,24 @@ function clearContent() {
     }
 }
 
-let isMobile = window.matchMedia("(max-width: 768px)").matches;
-let activeElement = null;
-if (isMobile) {
-    document.addEventListener('DOMContentLoaded', function () {
+function initMobileInteractions() {
+    if (mobileQuery.matches) {
         const hoverElements = document.querySelectorAll('[onmouseenter]:not(a[href])');
         hoverElements.forEach(element => {
             element.addEventListener('click', function (e) {
                 if (this !== activeElement) {
                     e.preventDefault();
                     const mouseenterAttr = this.getAttribute('onmouseenter');
-                    eval(mouseenterAttr);
+                    // Replace function calls to add isClick parameter
+                    const clickAttr = mouseenterAttr
+                        .replace(/updateContent\(([^)]+)\)/, 'updateContent($1, false, true)')
+                        .replace(/updateContentImg\(([^,]+),\s*([^)]+)\)/, 'updateContentImg($1, $2, true)');
+                    eval(clickAttr);
                     activeElement = this;
                 }
             });
         });
-    });
+    }
 }
 
 function openContactModal() {
@@ -115,14 +137,6 @@ function clearFormErrors() {
     });
 }
 
-function showFieldError(fieldId, message) {
-    const errorElement = document.getElementById(`${fieldId}-error`);
-    if (errorElement) {
-        errorElement.textContent = message;
-        errorElement.classList.remove('hidden');
-    }
-}
-
 function showFormError(message) {
     const errorElement = document.getElementById('form-error');
     if (errorElement) {
@@ -152,12 +166,15 @@ async function submitContactForm() {
             showFormError(errors.message || 'Verification failed. Please try again.');
         } else if (response.status === 500) {
             const errors = await response.json();
-            showFormError(errors.message || 'Server error. Please try again later.');
+            showFormError(errors.message || 'Server error. Please try again.');
         } else {
-            showFormError('An error occurred. Please try again later.');
+            showFormError('An error occurred.');
+            console.error('Unexpected response:', response);
         }
     } catch (error) {
-        console.error('Form submission error:', error);
         showFormError('Network error. Please check your connection.');
     }
 }
+
+document.addEventListener('DOMContentLoaded', initMobileInteractions);
+mobileQuery.addEventListener('change', initMobileInteractions);

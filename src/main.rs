@@ -4,6 +4,7 @@ use lettre::transport::smtp::authentication::Credentials;
 use lettre::{SmtpTransport, Transport};
 use serde::{Deserialize, Serialize};
 use std::env;
+use std::path::Path;
 use std::sync::Arc;
 use tera::{Context, Tera};
 use tower_http::services::ServeDir;
@@ -12,18 +13,33 @@ use tower_http::services::ServeDir;
 async fn main() {
     dotenvy::dotenv().ok();
 
-    let tera = match Tera::new("templates/**/*.html") {
+    // local dev vs production
+    let templates_pattern = if Path::new("src/templates").exists() {
+        "src/templates/**/*.html"
+    } else {
+        "templates/**/*.html"
+    };
+
+    let tera = match Tera::new(templates_pattern) {
         Ok(t) => t,
         Err(e) => {
             println!("Parsing error(s): {}", e);
             std::process::exit(1);
         }
     };
+
+    // local dev vs production
+    let static_path = if Path::new("src/static").exists() {
+        "src/static"
+    } else {
+        "static"
+    };
+
     let app = Router::new()
         .route("/", get(home))
         .route("/projects", get(projects))
         .route("/contact", get(contact).post(contact_post))
-        .nest_service("/static", ServeDir::new("static"))
+        .nest_service("/static", ServeDir::new(static_path))
         .with_state(Arc::new(tera));
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
