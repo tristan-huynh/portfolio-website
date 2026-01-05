@@ -155,7 +155,10 @@ async function submitContactForm() {
     try {
         const response = await fetch('/contact', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(formData)
         });
         
         if (response.ok) {
