@@ -119,88 +119,19 @@ jobs:
           cd ./artifact
           sha256sum -c portfolio-website.sha256
 
-      - name: Create backup of current version
-        continue-on-error: true
-        run: |
-          if [ -f /opt/portfolio/portfolio-website ]; then
-            sudo cp /opt/portfolio/portfolio-website /opt/portfolio/portfolio-website.backup.$(date +%Y%m%d_%H%M%S)
-            # Keep only last 5 backups
-            cd /opt/portfolio && sudo ls -t portfolio-website.backup.* 2>/dev/null | tail -n +6 | xargs -r sudo rm
-          fi
-
       - name: Stop service
-        run: |
-          sudo systemctl stop portfolio || true
-          # Wait for graceful shutdown
-          sleep 3
+        continue-on-error: true
+        run: systemctl stop portfolio
 
       - name: Deploy application
         run: |
-          # Create deployment directory with restricted permissions
-          sudo mkdir -p /opt/portfolio
-          sudo mkdir -p /opt/portfolio/logs
-          
-          # Copy binary
-          sudo cp ./artifact/portfolio-website /opt/portfolio/portfolio-website.new
-          
-          # Set restrictive permissions (owner read/execute only)
-          sudo chmod 550 /opt/portfolio/portfolio-website.new
-          
-          # Atomic rename
-          sudo mv /opt/portfolio/portfolio-website.new /opt/portfolio/portfolio-website
-          
-          # Create dedicated service user if doesn't exist
-          id -u portfolio &>/dev/null || sudo useradd -r -s /bin/false -d /opt/portfolio portfolio
-          
-          # Set ownership to service user
-          sudo chown -R portfolio:portfolio /opt/portfolio
-
-      - name: Create systemd service
-        run: |
-          sudo tee /etc/systemd/system/portfolio.service > /dev/null <<EOF
-          [Unit]
-          Description=Portfolio Web Application
-          After=network.target
-          
-          [Service]
-          Type=simple
-          User=portfolio
-          Group=portfolio
-          WorkingDirectory=/opt/portfolio
-          ExecStart=/opt/portfolio/portfolio-website
-          Restart=on-failure
-          RestartSec=5
-          StandardOutput=journal
-          StandardError=journal
-          
-          # Security hardening
-          NoNewPrivileges=true
-          PrivateTmp=true
-          ProtectSystem=strict
-          ProtectHome=true
-          ReadWritePaths=/opt/portfolio/logs
-          ProtectKernelTunables=true
-          ProtectControlGroups=true
-          RestrictRealtime=true
-          RestrictNamespaces=true
-          LockPersonality=true
-          MemoryDenyWriteExecute=true
-          RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
-          
-          # Resource limits
-          LimitNOFILE=65536
-          TasksMax=4096
-          
-          [Install]
-          WantedBy=multi-user.target
-          EOF
-          
-          sudo systemctl daemon-reload
+          # Copy binary to deployment location
+          cp ./artifact/portfolio-website /opt/portfolio/portfolio-website
+          chmod +x /opt/portfolio/portfolio-website
 
       - name: Start service
         run: |
-          sudo systemctl enable portfolio
-          sudo systemctl start portfolio
+          systemctl start portfolio
           sleep 5
 
       - name: Health check
@@ -220,24 +151,14 @@ jobs:
           done
           
           echo "Health check failed after $max_attempts attempts"
-          sudo journalctl -u portfolio -n 50
+          journalctl -u portfolio -n 50 --no-pager
           exit 1
 
-      - name: Rollback on failure
+      - name: Show logs on failure
         if: failure()
         run: |
-          echo "Deployment failed, attempting rollback..."
-          sudo systemctl stop portfolio
-          
-          # Restore from backup
-          BACKUP=$(sudo ls -t /opt/portfolio/portfolio-website.backup.* 2>/dev/null | head -n1)
-          if [ -n "$BACKUP" ]; then
-            sudo cp "$BACKUP" /opt/portfolio/portfolio-website
-            sudo systemctl start portfolio
-            echo "Rollback completed"
-          else
-            echo "No backup found for rollback"
-          fi
+          echo "Deployment failed, showing recent logs..."
+          journalctl -u portfolio -n 100 --no-pager
 
       - name: Cleanup old artifacts
         if: always()
