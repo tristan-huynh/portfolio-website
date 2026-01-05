@@ -10,6 +10,7 @@ use std::sync::Arc;
 use tera::{Context, Tera};
 use tower_http::services::ServeDir;
 use tower_http::set_header::SetResponseHeaderLayer;
+use tower_http::compression::CompressionLayer;
 
 use axum::extract::ConnectInfo;
 use std::collections::HashMap;
@@ -113,7 +114,8 @@ async fn main() {
                 connect-src 'self' https://challenges.cloudflare.com; \
                 frame-src https://challenges.cloudflare.com;"
             ),
-        ));
+        ))
+        .layer(CompressionLayer::new());
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     println!("Listenting on {}", listener.local_addr().unwrap());
