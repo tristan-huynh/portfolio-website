@@ -58,6 +58,15 @@ jobs:
         run: |
           cd target/release
           sha256sum portfolio-website > portfolio-website.sha256
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-build
+          path: |
+            target/release/portfolio-website
+            target/release/portfolio-website.sha256
+          retention-days: 1
           
   deploy:
     runs-on: self-hosted
@@ -71,6 +80,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: portfolio-build
+          path: target/release
 
       - name: Stop service
         continue-on-error: true
