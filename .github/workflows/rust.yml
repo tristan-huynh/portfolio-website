@@ -127,13 +127,13 @@ jobs:
 
       - name: Deploy application
         run: |
-          # Copy to temp location then atomic rename
           sudo cp ./artifact/portfolio-website /opt/portfolio/portfolio-website.new
           sudo chmod +x /opt/portfolio/portfolio-website.new
           sudo mv /opt/portfolio/portfolio-website.new /opt/portfolio/portfolio-website
           sudo cp -r src/templates /opt/portfolio/
           sudo cp -r src/static /opt/portfolio/
 
+          sudo chown -R portfolio:portfolio /opt/portfolio
       - name: Start service
         run: |
           sudo systemctl start portfolio
