@@ -121,13 +121,18 @@ jobs:
 
       - name: Stop service
         continue-on-error: true
-        run: sudo systemctl stop portfolio
+        run: |
+          sudo systemctl stop portfolio
+          sleep 2
 
       - name: Deploy application
         run: |
-          # Copy binary to deployment location
-          cp ./artifact/portfolio-website /opt/portfolio/portfolio-website
-          chmod +x /opt/portfolio/portfolio-website
+          # Copy to temp location then atomic rename
+          sudo cp ./artifact/portfolio-website /opt/portfolio/portfolio-website.new
+          sudo chmod +x /opt/portfolio/portfolio-website.new
+          sudo mv /opt/portfolio/portfolio-website.new /opt/portfolio/portfolio-website
+          sudo cp -r src/templates /opt/portfolio/
+          sudo cp -r src/static /opt/portfolio/
 
       - name: Start service
         run: |
