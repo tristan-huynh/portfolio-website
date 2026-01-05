@@ -8,9 +8,9 @@ use std::env;
 use std::path::Path;
 use std::sync::Arc;
 use tera::{Context, Tera};
+use tower_http::compression::CompressionLayer;
 use tower_http::services::ServeDir;
 use tower_http::set_header::SetResponseHeaderLayer;
-use tower_http::compression::CompressionLayer;
 
 use axum::extract::ConnectInfo;
 use std::collections::HashMap;
@@ -18,6 +18,7 @@ use std::net::SocketAddr;
 use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+// rate limiter implmentation
 struct RateLimiter {
     requests: Mutex<HashMap<String, Vec<u64>>>,
 }
@@ -38,7 +39,7 @@ impl RateLimiter {
         let mut requests = self.requests.lock().unwrap();
         let ip_requests = requests.entry(ip.to_string()).or_default();
 
-        // Remove old requests outside window
+        // remove old requests outside window
         ip_requests.retain(|&timestamp| now - timestamp < window_secs);
 
         if ip_requests.len() >= max_requests {
@@ -111,7 +112,7 @@ async fn main() {
                 style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; \
                 img-src 'self' data:; \
                 font-src 'self' https://cdn.jsdelivr.net; \
-                connect-src 'self' https://challenges.cloudflare.com; \
+                connect-src 'self' https://challenges.cloudflare.com https://cdn.jsdelivr.net; \
                 frame-src https://challenges.cloudflare.com;"
             ),
         ))
