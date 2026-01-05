@@ -12,7 +12,7 @@ use tower_http::services::ServeDir;
 async fn main() {
     dotenvy::dotenv().ok();
 
-    let tera = match Tera::new("src/templates/**/*.html") {
+    let tera = match Tera::new("templates/**/*.html") {
         Ok(t) => t,
         Err(e) => {
             println!("Parsing error(s): {}", e);
@@ -23,7 +23,7 @@ async fn main() {
         .route("/", get(home))
         .route("/projects", get(projects))
         .route("/contact", get(contact).post(contact_post))
-        .nest_service("/static", ServeDir::new("src/static"))
+        .nest_service("/static", ServeDir::new("static"))
         .with_state(Arc::new(tera));
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
