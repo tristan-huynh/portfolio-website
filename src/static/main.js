@@ -1,5 +1,6 @@
 let isClosing = false;
 let activeElement = null;
+let turnstileLoaded = false;
 
 const mobileQuery = window.matchMedia("(max-width: 768px)");
 
@@ -30,12 +31,12 @@ function closeMobilePopup() {
     }, 300);
 }
 
-function updateContent(detailed, isLink = false, isClick = false) {
-    // Skip hover events on mobile - only allow click interactions
-    if (mobileQuery.matches && !isLink && !isClick) {
+function updateContent(detailed, isLink = false) {
+    // disable hover on mobile
+    if (mobileQuery.matches && !isLink) {
         return;
     }
-    
+
     const detailedBlock = document.getElementById("detailed-content");
     if (detailedBlock) {
         detailedBlock.style.opacity = '0';
@@ -48,12 +49,13 @@ function updateContent(detailed, isLink = false, isClick = false) {
         showMobilePopup(detailed);
     }
 }
-function updateContentImg(img, detailed, isClick = false) {
+
+function updateContentImg(img, detailed) {
     // disable hover on mobile
-    if (mobileQuery.matches && !isClick) {
+    if (mobileQuery.matches) {
         return;
     }
-    
+
     const detailedBlock = document.getElementById("detailed-content");
     if (detailedBlock) {
         detailedBlock.style.opacity = '0';
@@ -65,12 +67,13 @@ function updateContentImg(img, detailed, isClick = false) {
     const imgContent = detailed + '<br><img id="img-content" src="' + img + '" alt="Image" class="mt-2 w-full h-auto border-4 border-blue-800 p-2"/>';
     showMobilePopup(imgContent);
 }
+
 function clearContent() {
     // disable hover on mobile
     if (mobileQuery.matches) {
         return;
     }
-    
+
     const detailedBlock = document.getElementById("detailed-content");
     if (detailedBlock) {
         detailedBlock.style.opacity = '0';
@@ -81,19 +84,46 @@ function clearContent() {
     }
 }
 
+function initHoverInteractions() {
+    const hoverElements = document.querySelectorAll('[data-hover]');
+
+    hoverElements.forEach(element => {
+        element.addEventListener('mouseenter', function () {
+            const hoverText = this.getAttribute('data-hover');
+            const hoverImg = this.getAttribute('data-hover-img');
+            const isLink = this.getAttribute('data-is-link') === 'true';
+
+            if (hoverImg) {
+                updateContentImg(hoverImg, hoverText);
+            } else {
+                updateContent(hoverText, isLink);
+            }
+        });
+
+        element.addEventListener('mouseleave', function () {
+            clearContent();
+        });
+    });
+}
+
 function initMobileInteractions() {
     if (mobileQuery.matches) {
-        const hoverElements = document.querySelectorAll('[onmouseenter]:not(a[href])');
+        const hoverElements = document.querySelectorAll('[data-hover]:not(a[href])');
         hoverElements.forEach(element => {
             element.addEventListener('click', function (e) {
                 if (this !== activeElement) {
                     e.preventDefault();
-                    const mouseenterAttr = this.getAttribute('onmouseenter');
-                    // Replace function calls to add isClick parameter
-                    const clickAttr = mouseenterAttr
-                        .replace(/updateContent\(([^)]+)\)/, 'updateContent($1, false, true)')
-                        .replace(/updateContentImg\(([^,]+),\s*([^)]+)\)/, 'updateContentImg($1, $2, true)');
-                    eval(clickAttr);
+
+                    const hoverText = this.getAttribute('data-hover');
+                    const hoverImg = this.getAttribute('data-hover-img');
+
+                    if (hoverImg) {
+                        const imgContent = hoverText + '<br><img id="img-content" src="' + hoverImg + '" alt="Image" class="mt-2 w-full h-auto border-4 border-blue-800 p-2"/>';
+                        showMobilePopup(imgContent);
+                    } else {
+                        showMobilePopup(hoverText);
+                    }
+
                     activeElement = this;
                 }
             });
@@ -101,9 +131,49 @@ function initMobileInteractions() {
     }
 }
 
-function openContactModal() {
+function initActionHandlers() {
+    // click events with data-action attributes
+    document.addEventListener('click', function (e) {
+        const target = e.target.closest('[data-action]');
+        if (target) {
+            const action = target.getAttribute('data-action');
+
+            // prevent event bubbling for specific actions
+            if (action === 'closeMobilePopup') {
+                e.stopPropagation();
+            }
+
+            switch (action) {
+                case 'openContactModal':
+                    openContactModal();
+                    break;
+                case 'closeContactModal':
+                    closeContactModal();
+                    break;
+                case 'submitContactForm':
+                    submitContactForm();
+                    break;
+                case 'closeSuccessModal':
+                    closeSuccessModal();
+                    break;
+                case 'closeMobilePopup':
+                    closeMobilePopup();
+                    break;
+            }
+        }
+    });
+}
+
+async function openContactModal() {
     const modal = document.getElementById('contact-modal');
     if (!modal) return;
+
+    try {
+        await loadTurnstile();
+    } catch (error) {
+        console.error('Failed to load Turnstile:', error);
+    }
+
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 }
@@ -145,13 +215,29 @@ function showFormError(message) {
     }
 }
 
+function loadTurnstile() {
+    if (turnstileLoaded) return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+        script.async = true;
+        script.defer = true;
+        script.onload = () => {
+            turnstileLoaded = true;
+            resolve();
+        };
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
 
 async function submitContactForm() {
     clearFormErrors();
-    
+
     const form = document.getElementById('contact-form');
     const formData = new FormData(form);
-    
+
     try {
         const response = await fetch('/contact', {
             method: 'POST',
@@ -160,7 +246,7 @@ async function submitContactForm() {
             },
             body: new URLSearchParams(formData)
         });
-        
+
         if (response.ok) {
             document.getElementById('success-modal').classList.remove('hidden');
             document.getElementById('success-modal').classList.add('flex');
@@ -179,5 +265,12 @@ async function submitContactForm() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', initMobileInteractions);
+// initialize all event listeners when DOM is ready
+document.addEventListener('DOMContentLoaded', function () {
+    initHoverInteractions();
+    initMobileInteractions();
+    initActionHandlers();
+});
+
+// reinitialize mobile interactions on viewport change
 mobileQuery.addEventListener('change', initMobileInteractions);

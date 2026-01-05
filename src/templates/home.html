@@ -22,28 +22,23 @@
         <span class="w-lg">Skills</span>
     </div>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
-        onmouseenter="updateContent('Low-level programming for microcontrollers and embedded systems. Experience with STM32 and ESP32 development boards, firmware programming, hardware-in-the-loop testing, and debugging.')"
-        onmouseleave="clearContent()">
+        data-hover="Low-level programming for microcontrollers and embedded systems. Experience with STM32 and ESP32 development boards, firmware programming, hardware-in-the-loop testing, and debugging.">
         <span class="w-lg">Embedded Systems (C, STM32, ESP32)</span>
     </div>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
-        onmouseenter="updateContent('Building robust scalable systems with Rust and Python. Focused on performance, safety, and scalability. Experience with hardware interfacing, data processing, and automation systems.')"
-        onmouseleave="clearContent()">
+        data-hover="Building robust scalable systems with Rust and Python. Focused on performance, safety, and scalability. Experience with hardware interfacing, data processing, and automation systems.">
         <span class="w-lg">Backend Development (Rust, Python)</span>
     </div>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
-        onmouseenter="updateContent('System administration in VMware, Windows, and Linux environments. Experience with networking, virtualization, cloud services, and security in Microsoft Active Directory and AWS environments.')"
-        onmouseleave="clearContent()">
+        data-hover="System administration in VMware, Windows, and Linux environments. Experience with networking, virtualization, cloud services, and security in Microsoft Active Directory and AWS environments.">
         <span class="w-lg">System Administration (VMware, Linux, AWS)</span>
     </div>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
-        onmouseenter="updateContent('Experience with board design with KiCAD, integrating hardware components, and testing with respective software and tooling, including oscilloscopes and multimeters.')"
-        onmouseleave="clearContent()">
+        data-hover="Experience with board design with KiCAD, integrating hardware components, and testing with respective software and tooling, including oscilloscopes and multimeters.">
         <span class="w-lg">Hardware Design & PCB Layout</span>
     </div>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
-        onmouseenter="updateContent('Proficient in I2C, SPI, UART communication protocols for embedded systems integration.')"
-        onmouseleave="clearContent()">
+        data-hover="Proficient in I2C, SPI, UART communication protocols for embedded systems integration.">
         <span class="w-lg">Communication Protocols (I2C, SPI, UART)</span>
     </div>
 
@@ -53,8 +48,7 @@
         <span class="w-lg">Education</span>
     </div>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
-        onmouseenter="updateContent('Bachelor of Science in Computer Engineering, Expected Graduation: 2027.<br><br> Relevant Coursework: Microcontrollers, Signals & Systems, Electronics, Digital Logic.<br><br> Activities: Institute of Electrical and Electronic Engineers, Aerospace Enterprise, Networking & Computing Student Association.')"
-        onmouseleave="clearContent()">
+        data-hover="Bachelor of Science in Computer Engineering, Expected Graduation: 2027.<br><br> Relevant Coursework: Microcontrollers, Signals & Systems, Electronics, Digital Logic.<br><br> Activities: Institute of Electrical and Electronic Engineers, Aerospace Enterprise, Networking & Computing Student Association.">
         <span>B.S. Computer Engineering - Michigan Technological University</span>
     </div>
 
@@ -64,8 +58,7 @@
         <span class="w-lg">Experience</span>
     </div>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
-        onmouseenter="updateContent('Decommissioned EOL Cisco switches at 20 field offices, improving network security and compliance.<br><br>Developed IT administration tools using PowerShell and Bash to audit and correct Active Directory user metadata and security groups, enhancing security and compliance.<br><br>Developed a JavaScript backend that integrates Microsoft Entra ID and Graph API to provision and automatically expire guest accounts for field engineers accessing a training hub portal.<br><br>Skills: Python, Powershell, Cisco Meraki, Datto RMM, Active Directory, JavaScript, AWS S3, GitLab, Confluence')"
-        onmouseleave="clearContent()">
+        data-hover="Decommissioned EOL Cisco switches at 20 field offices, improving network security and compliance.<br><br>Developed IT administration tools using PowerShell and Bash to audit and correct Active Directory user metadata and security groups, enhancing security and compliance.<br><br>Developed a JavaScript backend that integrates Microsoft Entra ID and Graph API to provision and automatically expire guest accounts for field engineers accessing a training hub portal.<br><br>Skills: Python, Powershell, Cisco Meraki, Datto RMM, Active Directory, JavaScript, AWS S3, GitLab, Confluence">
         <span class="w-lg">IT Infrastructure Support Intern - Service Express</span>
     </div>
 
@@ -75,8 +68,8 @@
         <span class="hidden md:inline">Skills & Tools</span>
     </div>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out group flex-col md:flex-row" 
-        onmouseenter="updateContentImg('../static/img/dso.jpg', 'A simple digital storage oscilloscope (DSO) implementation using STM32F303K8 microcontroller with SSD1306 OLED display. <br>Utilizes a 12-bit ADC @ 64 MHz and DMA for efficient data acquisition with a 10:1 attenuation stage with 3.3V offset and 1N4728A zener diode. Features Single Mode, Rising Edge trigger, Stop & Start acquisition modes.' )"
-        onmouseleave="clearContent()">
+        data-hover-img="../static/img/dso.jpg"
+        data-hover="A simple digital storage oscilloscope (DSO) implementation using STM32F303K8 microcontroller with SSD1306 OLED display. <br>Utilizes a 12-bit ADC @ 64 MHz and DMA for efficient data acquisition with a 10:1 attenuation stage with 3.3V offset and 1N4728A zener diode. Features Single Mode, Rising Edge trigger, Stop & Start acquisition modes.">
         <span class="w-lg group-hover:pl-6 transition-all duration-200 ease-in-out">STM32 Digital Storage Oscilliscope</span>
         <span class="text-zinc-500">C, STM32, I2C, ADC, DMA, Hardware Design</span>
     </div>
@@ -84,16 +77,16 @@
         href="https://github.com/tristan-huynh/stm32-dso" 
         rel="noopener noreferrer" 
         target="_blank"
-        onmouseenter="updateContent('View the source code for this project on GitHub. This link opens in a new tab.', true)"
-        onmouseleave="clearContent()">
+        data-hover="View the source code for this project on GitHub. This link opens in a new tab."
+        data-is-link="true">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>
         <span>View on GitHub</span>
     </a>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out group flex-col md:flex-row"
-        onmouseenter="updateContentImg('../static/img/bms.png', 'A modern, high-performance static website for Blue Marble Security, featuring mobile-responsive design, SEO optimization, content-optimization techniques, accessibility compliance, and optimizations for static deployment.')"
-        onmouseleave="clearContent()">
+        data-hover-img="../static/img/bms.png"
+        data-hover="A modern, high-performance static website for Blue Marble Security, featuring mobile-responsive design, SEO optimization, content-optimization techniques, accessibility compliance, and optimizations for static deployment.">
         <span class="w-lg group-hover:pl-6 transition-all duration-200 ease-in-out">Blue Marble Security Website</span>
         <span class="text-zinc-500">Astro, HTML, TailwindCSS, TypeScript</span>
     </div>
@@ -101,16 +94,16 @@
         href="https://github.com/tristan-huynh/blue-marble-security-website" 
         rel="noopener noreferrer" 
         target="_blank"
-        onmouseenter="updateContent('View the source code for this project on GitHub. This project features a live demo. This link opens in a new tab.', true)"
-        onmouseleave="clearContent()">
+        data-hover="View the source code for this project on GitHub. This project features a live demo. This link opens in a new tab."
+        data-is-link="true">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>
         <span>View on GitHub</span>
     </a>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out group flex-col md:flex-row"
-        onmouseenter="updateContentImg('../static/img/env.jpg', 'A comprehensive environmental monitoring system built with STM32L152RE microcontroller that monitors temperature and humidity, provides visual feedback, controls a fan for climate management, and logs data over UART.')"
-        onmouseleave="clearContent()">
+        data-hover-img="../static/img/env.jpg"
+        data-hover="A comprehensive environmental monitoring system built with STM32L152RE microcontroller that monitors temperature and humidity, provides visual feedback, controls a fan for climate management, and logs data over UART.">
         <span class="w-lg group-hover:pl-6 transition-all duration-200 ease-in-out">STM32 Environmental Monitor</span>
         <span class="text-zinc-500">C, STM32, I2C, SPI, Timers, Interrupts, SQLite</span>
     </div>
@@ -118,16 +111,16 @@
         href="https://github.com/tristan-huynh/stm32-env-station" 
         rel="noopener noreferrer" 
         target="_blank"
-        onmouseenter="updateContent('View the source code for this project on GitHub. This link opens in a new tab.', true)"
-        onmouseleave="clearContent()">
+        data-hover="View the source code for this project on GitHub. This link opens in a new tab."
+        data-is-link="true">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>
         <span>View on GitHub</span>
     </a>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out group flex-col md:flex-row"
-        onmouseenter="updateContentImg('../static/img/wte.png', 'A ready-to-deploy Discord bot that scrapes the poorly designed DineOnCampus website to provide users with easy access to daily menu information directly within Discord.')"
-        onmouseleave="clearContent()">
+        data-hover-img="../static/img/wte.png"
+        data-hover="A ready-to-deploy Discord bot that scrapes the poorly designed DineOnCampus website to provide users with easy access to daily menu information directly within Discord.">
         <span class="w-lg group-hover:pl-6 transition-all duration-200 ease-in-out">What's To Eat Discord Bot</span>
         <span class="text-zinc-500">Python, Docker</span>
     </div>
@@ -135,16 +128,16 @@
         href="https://github.com/tristan-huynh/whats-to-eat" 
         rel="noopener noreferrer" 
         target="_blank"
-        onmouseenter="updateContent('View the source code for this project on GitHub. This link opens in a new tab.', true)"
-        onmouseleave="clearContent()">
+        data-hover="View the source code for this project on GitHub. This link opens in a new tab."
+        data-is-link="true">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>
         <span>View on GitHub</span>
     </a>
     <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out group flex-col md:flex-row"
-        onmouseenter="updateContentImg('../static/img/port.png', 'A personal portfolio website built with Rust and Tera templating engine, featuring a responsive design with TailwindCSS. Showcases projects, skills, and contact information with dynamic content rendering.')"
-        onmouseleave="clearContent()">
+        data-hover-img="../static/img/port.png"
+        data-hover="A personal portfolio website built with Rust and Tera templating engine, featuring a responsive design with TailwindCSS. Showcases projects, skills, and contact information with dynamic content rendering.">
         <span class="w-lg group-hover:pl-6 transition-all duration-200 ease-in-out">Portfolio Website</span>
         <span class="text-zinc-500">HTML, TailwindCSS, Javascript, Rust</span>
     </div>
@@ -152,8 +145,8 @@
         href="https://github.com/tristan-huynh/portfolio-website" 
         rel="noopener noreferrer" 
         target="_blank"
-        onmouseenter="updateContent('View the source code for this project on GitHub. This link opens in a new tab.', true)"
-        onmouseleave="clearContent()">
+        data-hover="View the source code for this project on GitHub. This link opens in a new tab."
+        data-is-link="true">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>
@@ -183,7 +176,7 @@
         </svg>
         <span class="w-lg">GitHub</span>
     </a>
-    <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6" onclick="openContactModal()">
+    <div class="flex text-blue-700 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6" data-action="openContactModal">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>
@@ -202,25 +195,22 @@
         <span class="w-lg">Contacts</span>
     </div>
     <a class="flex text-blue-700 px-4 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6" href="https://www.linkedin.com/in/huynhtristan/" rel="noopener noreferrer" target="_blank"
-        onmouseenter="updateContent('My LinkedIn profile. This link opens in a new tab.')"
-        onmouseleave="clearContent()">
+        data-hover="My LinkedIn profile. This link opens in a new tab.">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>
         <span class="w-lg">LinkedIn</span>
     </a>
     <a class="flex text-blue-700 px-4 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6" href="https://github.com/tristan-huynh" rel="noopener noreferrer" target="_blank"
-        onmouseenter="updateContent('GitHub profile for more of my projects and code. This link opens in a new tab.')"
-        onmouseleave="clearContent()">
+        data-hover="GitHub profile for more of my projects and code. This link opens in a new tab.">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>
         <span class="w-lg">GitHub</span>
     </a>
     <div class="flex text-blue-700 px-4 hover:text-blue-500 cursor-pointer transition-all duration-200 ease-in-out hover:pl-6"
-        onclick="openContactModal()"
-        onmouseenter="updateContent('A contact form to send a message directly to me via email.')"
-        onmouseleave="clearContent()">
+        data-action="openContactModal"
+        data-hover="A contact form to send a message directly to me via email.">
         <svg class="w-4 h-4 mr-1 mt-1 flex-shrink-0 -ml-5" fill="currentColor" viewBox="0 0 16 16">
             <path d="M4 2l8 6-8 6V2z"/>
         </svg>

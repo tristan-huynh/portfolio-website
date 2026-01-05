@@ -5,17 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tristan Huynh - Portfolio</title>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+    <link rel="prefetch" href="/static/img/bms.png" as="image">
+    <link rel="prefetch" href="/static/img/dso.jpg" as="image">
+    <link rel="prefetch" href="/static/img/env.jpg" as="image">
+    <link rel="prefetch" href="/static/img/port.png" as="image">
+    <link rel="prefetch" href="/static/img/wte.png" as="image">
+
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href=" https://cdn.jsdelivr.net/npm/roboto-font@0.1.0/css/fonts.min.css " rel="stylesheet">
-    <link rel="preconnect" href="https://challenges.cloudflare.com">
     <link rel="stylesheet" href="/static/style.css">
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-
 
     <!-- Primary Meta Tags -->
     <meta name="title" content="Tristan Huynh's Portfolio">
-    <meta name="description"
-        content="Tristan Huynh - Computer Engineer @ Michigan Technological University. Explore my experience, skills, and projects.">
+    <meta name="description" content="Tristan Huynh - Computer Engineer at Michigan Technological University. Explore my experience, skills, and projects.">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -68,7 +74,7 @@
         <div class="bg-zinc-100 border-4 border-blue-800 w-11/12 max-w-lg mx-4 max-h-[80vh] overflow-y-auto">
             <div class="bg-blue-800 text-white px-4 py-2 font-bold flex justify-between items-center">
                 <span>Details</span>
-                <button onclick="event.stopPropagation(); closeMobilePopup();"
+                <button data-action="closeMobilePopup"
                     class="text-2xl hover:text-zinc-300">&times;</button>
             </div>
             <div class="p-4 text-blue-700 font-bold">
@@ -80,7 +86,7 @@
         <div class="bg-zinc-300 border-zinc-300 w-96 max-w-[90vw]" style="filter: drop-shadow(12px 12px 0px black);">
             <div class="bg-blue-800 text-white px-4 py-2 font-bold flex justify-between items-center">
                 <span>Contact Me</span>
-                <button onclick="closeContactModal()" class="text-2xl hover:text-zinc-300">&times;</button>
+                <button type="button" data-action="closeContactModal" class="text-2xl hover:text-zinc-300">&times;</button>
             </div>
             <div class="p-6 text-blue-700 font-bold">
                 <form id="contact-form" class="space-y-4" method="POST" action="/contact">
@@ -111,11 +117,11 @@
                 </form>
             </div>
             <div class="bg-blue-800 flex">
-                <button onclick="submitContactForm()"
+                <button type="button" data-action="submitContactForm"
                     class="flex-1 text-white font-bold py-2 border-r-2 border-zinc-300 hover:bg-blue-700">
                     Send
                 </button>
-                <button onclick="closeContactModal()" class="flex-1 text-white font-bold py-2 hover:bg-blue-700">
+                <button type="button" data-action="closeContactModal" class="flex-1 text-white font-bold py-2 hover:bg-blue-700">
                     Cancel
                 </button>
             </div>
@@ -130,7 +136,7 @@
                 <p>Your message has been sent successfully!</p>
             </div>
             <div class="bg-blue-800 flex">
-                <button onclick="closeSuccessModal()" class="flex-1 text-white font-bold py-2 hover:bg-blue-700">
+                <button type="button" data-action="closeSuccessModal" class="flex-1 text-white font-bold py-2 hover:bg-blue-700">
                     OK
                 </button>
             </div>
