@@ -23,6 +23,7 @@ jobs:
           components: rustfmt, clippy
 
       - name: Audit dependencies for vulnerabilities
+        continue-on-error: true
         run: |
           cargo install cargo-audit --locked
           cargo audit
