@@ -28,6 +28,7 @@ jobs:
           cargo audit
 
       - name: Check for outdated dependencies
+        continue-on-error: true
         run: |
           cargo install cargo-outdated --locked
           cargo outdated --exit-code 1 --root-deps-only || true
