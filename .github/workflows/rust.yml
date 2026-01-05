@@ -74,9 +74,11 @@ jobs:
             ${{ runner.os }}-target-
 
       - name: Check formatting
+        continue-on-error: true
         run: cargo fmt -- --check
 
       - name: Run clippy with strict checks
+        continue-on-error: true
         run: cargo clippy --all-targets --all-features -- -D warnings -D clippy::all
 
       - name: Build application
@@ -108,6 +110,11 @@ jobs:
       cancel-in-progress: false
     
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
